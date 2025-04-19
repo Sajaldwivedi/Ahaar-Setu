@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from 'react';
-import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import FoodCard from '../components/ui/FoodCard';
 import { Link } from 'react-router-dom';
@@ -111,7 +110,6 @@ const RequestPage = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Navbar userRole="partner" />
       <main className="flex-grow bg-cream">
         <div className="container mx-auto py-8 px-4">
           <div className="text-center mb-8">

@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import Navbar from '../components/layout/Navbar';
+import React, { useState, useEffect } from 'react';
 import Footer from '../components/layout/Footer';
 import { Calendar, Clock, MapPin, Camera, Tag, CheckCircle, AlertTriangle, Info, Image as ImageIcon } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useToast } from '../hooks/use-toast';
 import { useFood } from '../contexts/FoodContext';
 import { usePoints } from '../contexts/PointsContext';
+import { useAuth } from '../contexts/AuthContext';
 import { foodImages } from '../assets/foodImages';
 
 const foodCategories = [
@@ -21,6 +21,18 @@ const DonatePage = () => {
   const navigate = useNavigate();
   const { addDonation, getRecentDonations } = useFood();
   const { addPoints } = usePoints();
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (!user) {
+      toast({
+        title: 'Authentication Required',
+        description: 'Please log in to donate food',
+        variant: 'destructive'
+      });
+      navigate('/login');
+    }
+  }, [user, navigate, toast]);
   const [activeStep, setActiveStep] = useState(1);
   const [formData, setFormData] = useState({
     foodType: '',
@@ -107,7 +119,7 @@ const DonatePage = () => {
       addDonation({
         ...formData,
         foodTypeId: selectedCategory || 'packaged',
-        donorName: 'Cafe Green', // This would come from user context in a real app
+        donorName: user?.displayName || 'Anonymous',
         status: 'available'
       });
       addPoints(10); // Add 10 points for each donation
@@ -149,7 +161,6 @@ const DonatePage = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Navbar userRole="donor" />
       <main className="flex-grow bg-cream">
         <div className="container mx-auto py-8 px-4">
           <div className="max-w-4xl mx-auto">
@@ -477,7 +488,7 @@ const DonatePage = () => {
                                     {formData.quantity} {formData.quantityUnit} {formData.foodType.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
                                   </h5>
                                   <p className="text-xs text-slate mt-1">
-                                    From: Cafe Green
+                                    From: {user?.displayName || 'Anonymous'}
                                   </p>
                                 </div>
                                 

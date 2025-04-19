@@ -1,10 +1,11 @@
 import React from 'react';
+import { useAuth } from '../contexts/AuthContext';
 import { Link } from 'react-router-dom';
-import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import { Plus, History, Award, ChevronRight, Star, Bell } from 'lucide-react';
 
 const DonorDashboard = () => {
+  const { user } = useAuth();
   const mockDonations = [
     {
       id: 'don1',
@@ -46,13 +47,12 @@ const DonorDashboard = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Navbar userRole="donor" />
       <main className="flex-grow bg-cream">
         <div className="container mx-auto py-8 px-4">
           <div className="bg-purple rounded-xl p-6 md:p-8 mb-8">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
               <div>
-                <h1 className="text-2xl md:text-3xl font-bold text-white">Welcome, Cafe Green!</h1>
+                <h1 className="text-3xl font-bold text-white">Welcome, {user?.displayName || 'Anonymous'}!</h1>
                 <p className="text-purple-light mt-2">Your contributions are making a difference</p>
               </div>
               <div className="mt-4 md:mt-0">
